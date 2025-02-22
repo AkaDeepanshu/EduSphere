@@ -236,7 +236,7 @@ exports.changePassword = async (req,res)=>{
         if(await bcrypt.compare(oldPassword,user.password)){
             const hashedPassword = await bcrypt.hash(newPassword,10);
 
-            const updatedUser = await User.findOneAndUpdate({email},{password:hashedPassword},{new:true});
+            await User.findByIdAndUpdate(userId,{password:hashedPassword});
         }
         // send confirmation mail
         const mailResponse = await mailSender(email,"Password changed successfully","Your password has been changed successfully");

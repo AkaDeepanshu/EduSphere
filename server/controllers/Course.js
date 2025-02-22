@@ -7,10 +7,10 @@ const {uploadImageToCloudinary} = require('../utils/imageUploader');
 exports.createCourse = async (req,res)=>{
     try{
         // fetch data from request body
-        const {courseName,courseDescription,whatYouWillLearn,price,category} = req.body;
+        const {courseName,courseDescription,whatYouWillLearn,price,category,tags} = req.body;
         const thumbnail = req.file.thumbnailImage;
         // validate data
-        if(!courseName ||!courseDescription || !whatYouWillLearn || !price || !category || !thumbnail){
+        if(!courseName ||!courseDescription || !whatYouWillLearn || !price || !category || !tags || !thumbnail){
             return res.status(400).json({
                 success:false,
                 message:"Please provide all details",
@@ -51,6 +51,7 @@ exports.createCourse = async (req,res)=>{
             price,
             thumbnail:thumbnailImage.secure_url,
             category:categoryDetails._id,
+            tags
         })
 
         // add the new course to the user schema of instructor
