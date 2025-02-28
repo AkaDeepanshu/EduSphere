@@ -94,9 +94,7 @@ exports.createCourse = async (req,res)=>{
     }
 }
 
-
 // getAllCourses handler function
-
 exports.showAllCourses = async (req,res)=>{
     try{
         const allCourses = await Course.find({},{courseName:true,
@@ -124,5 +122,54 @@ exports.showAllCourses = async (req,res)=>{
         })
     }
 };
+
+// getCourseDetails handler function
+exports.getCourseDetails = async (req,res) =>{
+    try{
+        // get user id 
+        const userId = req.user.id;
+        // get course id
+        const {courseId} = req.body;
+        // fetch course details from db
+        const courseDetails = await Course.findById(courseId)
+                                                    .populate({
+                                                        path:"instructor",
+                                                        populate:{
+                                                            path:"additionalDetails",
+                                                        }
+                                                    })
+                                                    .populate({
+                                                        path:"courseContent",
+                                                        populate:{
+                                                            path:"subSection"
+                                                        }
+                                                    })
+                                                    .populate("ratingAndReview")
+                                                    .populate("category")
+                                                    .exec(); 
+                                                    
+        // check if course details are available or not
+        if(!courseDetails){
+            return res.status(404).json({
+                success:false,
+                message:"Course details not found",
+            });
+        }
+
+        return res.status(200).json({
+            success:true,
+            message:"Fetched course details successfully",
+            data:courseDetails,
+        })
+    }
+    catch(error){
+        console.log(error.message);
+        return res.status(400).json({
+            success:false,
+            message:"Error while fetching course details",
+            error:error.message,
+        })
+    }
+}
 
 
