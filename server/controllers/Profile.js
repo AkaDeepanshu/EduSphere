@@ -85,7 +85,6 @@ exports.deleteAccount = async (req,res)=>{
 }
 
 // getProfile handler function
-
 exports.getUserDetails = async (req,res)=>{
     try{
         // get user id
@@ -112,5 +111,30 @@ exports.getUserDetails = async (req,res)=>{
             success:false,
             message:"Error while fetching user data",
         });
+    }
+}
+
+// getEnrolledCourses handler function
+exports.getEnrolledCourses = async (req,res)=>{
+    try{
+        // get user id
+        const userId = req.user.id;
+        // get Enrolled Courses
+        const enrolledCourses = await Course.find({studentsEnrolled:userId});
+        // return response
+        return res.status(200).json({
+            success:true,
+            message:"Enrolled Courses fetched successfully",
+            data:enrolledCourses,
+        });
+
+    }
+    catch(error){
+        console.log(error.message);
+        return res.status(500).json({
+            success:false,
+            message:"Error while fetching enrolled courses of user",
+        });
+
     }
 }
