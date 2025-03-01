@@ -7,7 +7,8 @@ const {
     updateProfile,
     deleteAccount,
     getUserDetails,
-    getEnrolledCourses
+    getEnrolledCourses,
+    uploadProfileImage
 
 } = require('../controllers/Profile');
 
@@ -17,6 +18,7 @@ const {
 // Route for profile
 router.delete('/deleteProfile',deleteAccount);
 router.put('/updateProfile',auth,updateProfile);
+router.put('/updateProfileImage',auth,uploadProfileImage);
 router.get('/getUserDetails',auth,getUserDetails);
 
 // Routes for enrolled courses

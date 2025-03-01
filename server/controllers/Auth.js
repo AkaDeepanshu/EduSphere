@@ -11,7 +11,7 @@ require('dotenv').config;
 exports.sendOtp = async (req,res)=>{
     try{
         // fetch email from request
-        const email = req.body
+        const email = req.body.email;
 
         // check if user exists
         const checkUser = await User.findOne({email});
@@ -21,28 +21,29 @@ exports.sendOtp = async (req,res)=>{
         }
         // generate otp
         var otp = otpGenerator.generate(6,{
+            digits:true,
             upperCase: false,
             specialChars: false,
             lowerCase: false
         });
         console.log("Generated OTP", otp);
 
-        // check unique otp or not
-        const checkotp = await Otp.findOne({otp:otp});
-        while(checkotp){
-            otp = otpGenerator.generate(6,{
-                upperCase: false,
-                specialChars: false,
-                lowerCase: false
-            });
-            checkotp = await Otp.findOne({otp:otp});
-        }
+        //  // check unique otp or not
+        // const checkotp = await Otp.findOne({otp:otp});
+        // while(checkotp){
+        //     otp = otpGenerator.generate(6,{
+        //         upperCase: false,
+        //         specialChars: false,
+        //         lowerCase: false
+        //     });
+        //     checkotp = await Otp.findOne({otp:otp});
+        // }
 
         // save otp in db
         const otpPayload = {email,otp};
 
         const otpBody = await Otp.create(otpPayload);
-        console.log("OTP saced",otpBody);
+        console.log("OTP created:",otpBody);
 
         // return response
         return res.status(200).json({
@@ -72,7 +73,7 @@ exports.signUp = async (req,res)=>{
             confirmPassword,
             otp} = req.body;
         // validate data
-        if(!firstName || !lastName || !email || !accountType || !password ||!confirmPassword || !otp){
+        if(!firstName || !lastName || !email || !accountType || !password || !confirmPassword || !otp){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required"});
@@ -94,19 +95,22 @@ exports.signUp = async (req,res)=>{
         }
 
         // fetch most recent otp from db
-        const recentOtp = await Otp.find({email}).sort({createdAt:-1}).limit(1);
+        const recentOtp = await Otp.findOne({email}).sort({createdAt:-1}).limit(1);
         console.log("Recent OTP",recentOtp);
         // validate otp
-        if(recentOtp.length===0){
+        if(!recentOtp){
             return res.status(400).json({
                 success:false,
                 message:"OTP not found",
             });
         }
         else if(otp!==recentOtp.otp){
+            console.log("Recent OTP",recentOtp.otp);
             return res.status(400).json({
                 success:false,
-                message:"Invalid OTP"
+                message:"Invalid OTP",
+                recentOtp:recentOtp.otp,
+                userOtp:otp,
                 })
         }
 

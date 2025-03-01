@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const mailSender = require('../utils/mailSender');
+const {EmailVerificationTemplete } = require('../mail/templetes/EmailVerificationTemplete')
 
 const otpSchema = new mongoose.Schema({
     otp: {
@@ -12,14 +14,14 @@ const otpSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now(),
-        expires: 300 
+        expires: Date.now() + 30*60*1000, 
     }
 });
 
 async function sendVerificationEmail(email, otp) {
     // Send email logic here
     try{
-        const mailResponse = await mailSender(email,"Verification email from EduSphere", otp);
+        const mailResponse = await mailSender(email,"Verification email from EduSphere", EmailVerificationTemplete(otp));
         console.log("EMail sent successfully", mailResponse);
 
     }

@@ -1,6 +1,7 @@
 const Profile = require('../models/Profile');
 const User = require('../models/User');
 const Course = require('../models/Course');
+const {uploadImageToCloudinary} = require('../utils/imageUploader');
 
 // update profile handler function
 exports.updateProfile = async (req,res) =>{
@@ -136,5 +137,40 @@ exports.getEnrolledCourses = async (req,res)=>{
             message:"Error while fetching enrolled courses of user",
         });
 
+    }
+}
+
+// uploadProfileImage handler function
+exports.uploadProfileImage = async(req,res)=>{
+    try{
+        // get user id
+        const userId = req.user.id;
+        // get image
+        const image = req.files.image;
+        // validate image
+        if(!image){
+            return res.status(400).json({
+                success:false,
+                message:"Image is required",
+            });
+        }
+        // upload image to cloudinary
+        const imageResponse = await uploadImageToCloudinary(image,process.env.FOLDER_NAME);
+        // update image in profile
+        const updatedUser = await User.findByIdAndUpdate(userId,{image:imageResponse.secure_url},{new:true});
+        // return resposne
+        return res.status(200).json({
+            success:true,
+            message:"Image updated successfully",
+            updatedUser
+        })
+    }
+    catch(error){
+        console.log(error.message);
+        return res.status(500).json({
+            success:false,
+            message:"Error while updating Image",
+            error:error.message
+        })
     }
 }
