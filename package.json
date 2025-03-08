@@ -1,5 +1,10 @@
 {
+  "scripts": {
+    "server":"cd server && npm run dev",
+    "client":"cd client && npm run dev",
+    "dev":"concurrently -n \"server,client\" -c \"bgRed,bgGreen\" \"npm run server\" \"npm run client\""
+  },
   "dependencies": {
-    "cloudinary": "^2.5.1"
+    "concurrently": "^9.1.2"
   }
 }

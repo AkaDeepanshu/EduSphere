@@ -1,4 +1,3 @@
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('dotenv').config;
 
@@ -17,8 +16,6 @@ exports.auth = async(req,res,next)=>{
                 message:"Token missing",
             });
         }
-
-        console.log("Token:",token);
 
         // verify the token 
         try{

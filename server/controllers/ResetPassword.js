@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const mailSender = require('../utils/mailSender');
+const bcrypt = require('bcrypt');
 
 // resetPasswordToken
 exports.resetPasswordToken = async (req,res) =>{
@@ -19,7 +20,7 @@ exports.resetPasswordToken = async (req,res) =>{
         // update user by adding token and expiration time
         const updateUser = await User.findOneAndUpdate({email:email},
             {   token:token,
-                resetPasswordExpires:Date.now() + 5*60*1000,
+                resetPasswordExpires:Date.now() + 10*60*1000,
             },
             {new:true}
         );
@@ -36,6 +37,7 @@ exports.resetPasswordToken = async (req,res) =>{
     catch(error){
         console.log(error.message);
         return res.status(400).json({
+            error:error.message,
             success:false,
             message:"Error while sending password reset link",
         });
@@ -82,6 +84,7 @@ exports.resetPassword = async(req,res)=>{
     catch(error){
         console.log(error.message);
         return res.status(400).json({
+            error:error.message,
             success:false,
             message:"Error while resetting password",
         });

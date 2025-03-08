@@ -16,8 +16,9 @@ const mailSender = async (email,title,body) => {
             from:"EduSphere",
             to:`${email}`,
             subject:`${title}`,
-            html:  `${body}`,
+            html:`${body}`,
         })
+        return info;
     }
     catch(error){
         console.log(error.message);

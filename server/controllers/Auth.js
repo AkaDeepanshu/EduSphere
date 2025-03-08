@@ -105,7 +105,6 @@ exports.signUp = async (req,res)=>{
             });
         }
         else if(otp!==recentOtp.otp){
-            console.log("Recent OTP",recentOtp.otp);
             return res.status(400).json({
                 success:false,
                 message:"Invalid OTP",
@@ -200,7 +199,7 @@ exports.login = async (req,res)=>{
         else{
             return res.status(401).json({
                 success:false,
-                message:"Invalid credentials",
+                message:"Password is incorrect, please try again",
             });
         }
         
@@ -239,12 +238,11 @@ exports.changePassword = async (req,res)=>{
         const user = await User.findById(userId);
         if(await bcrypt.compare(oldPassword,user.password)){
             const hashedPassword = await bcrypt.hash(newPassword,10);
-
             await User.findByIdAndUpdate(userId,{password:hashedPassword});
         }
         // send confirmation mail
-        const mailResponse = await mailSender(email,"Password changed successfully","Your password has been changed successfully");
-        console.log("Email sent successfully",mailResponse);
+        const mailResponse = await mailSender(user.email,"Password changed successfully","Your password has been changed successfully");
+        console.log("Email sent successfully!!",mailResponse);
         // return response
         return res.status(200).json({
             success:true,

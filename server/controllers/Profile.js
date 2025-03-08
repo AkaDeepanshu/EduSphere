@@ -91,7 +91,7 @@ exports.getUserDetails = async (req,res)=>{
         // get user id
         const id = req.user.id;
         // validate and get user data
-        const userDetails = User.findById(id).populate('additionalDetails').exec();
+        const userDetails = await User.findById(id).populate('additionalDetails').exec();
         if(!userDetails){
             return res.status(404).json({
                 success:false,
@@ -102,7 +102,7 @@ exports.getUserDetails = async (req,res)=>{
         return res.status(200).json({
             success:true,
             message:"User data fetched successfully",
-            userDetails
+            userDetails:userDetails
         })
 
     }
