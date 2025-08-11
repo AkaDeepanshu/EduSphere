@@ -4,7 +4,7 @@ import { BsChevronDown } from "react-icons/bs"
 import { useSelector } from "react-redux"
 import { Link, matchPath, useLocation } from "react-router-dom"
 
-import logo from "../../assets/Logo/Logo-Full-Light.png"
+import logo from "../../assets/Logo/logo.svg"
 import { NavbarLinks } from "../../data/navbar-links"
 import { apiConnector } from "../../services/apiconnector"
 import { categories } from "../../services/apis"
@@ -49,9 +49,7 @@ function Navbar() {
         {/* Logo */}
         <Link to="/">
           <div className="flex items-center gap-x-2">
-            <div className=" flex h-[40px] w-[40px] items-center justify-center text-[22px] font-bold bg-white p-1 rounded-full">
-              ES
-            </div>
+            <img src={logo} alt="EduSphere Logo" className="h-8 w-8" />
             <h1 className="text-white font-bold text-lg">EduSphere</h1>
           </div>
         </Link>
