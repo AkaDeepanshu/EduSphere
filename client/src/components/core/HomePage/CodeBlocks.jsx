@@ -1,83 +1,81 @@
-import React from 'react'
-import CTAButton from './CTAButton'
-import HighlightText from './HighlightText';
-import { FaArrowCircleRight } from "react-icons/fa";
-import {TypeAnimation} from "react-type-animation"
-
+import React from "react";
+import CTAButton from "./Button";
+import { TypeAnimation } from "react-type-animation";
+import { FaArrowRight } from "react-icons/fa";
 
 const CodeBlocks = ({
-    position , heading , subHeading , ctaBtn1 , ctaBtn2 , codeblock , backgroundgradient , codeColor
+  position,
+  heading,
+  subheading,
+  ctabtn1,
+  ctabtn2,
+  codeblock,
+  backgroundGradient,
+  codeColor,
 }) => {
   return (
-    <div className={`flex ${position} my-20 justify-between gap-20`}>
-        {/* Section 1 */}
-        <div className='w-[40%] flex flex-col gap-8'>
-            {heading}
-            <div className='text-richblack-200 font-bold'>
-                {subHeading}
-            </div>
+    <div className={`flex ${position} my-20 justify-between flex-col lg:gap-10 gap-10`}>
 
-            <div className='flex gap-10 mt-7'>
-                <CTAButton active={ctaBtn1.active} linkto={ctaBtn1.linkto}>
-                    <div className='flex gap-2 items-center'>
-                        {ctaBtn1.btnText}
-                        <FaArrowCircleRight/>
-                    </div>
-                </CTAButton>
-                <CTAButton active={ctaBtn2.active} linkto={ctaBtn2.linkto}>
-                        {ctaBtn2.btnText}
-                </CTAButton>
-            </div>
+
+      {/* Section 1  */}
+      <div className="w-[100%] lg:w-[50%] flex flex-col gap-8">
+        {heading}
+
+        {/* Sub Heading */}
+        <div className="text-richblack-300 text-base font-bold w-[85%] -mt-3">
+          {subheading}
         </div>
 
-        {/* Section 2 */}
-        <div className='w-[50%]'>
-        <div className='relative flex flex-row text-sm h-fit w-[100%] lg:w-500px p-4 bg-richblack-800 shadow-lg '>
-            
-            <div className='absolute top-10 left-30 z-10'>
-                <div 
-                    className=' rounded-full bg-gradient-to-br from-violet-800 to-blue-600'
-                    style={{
-                        boxShadow: `10px 10px 120px 120px rgba(104, 58, 183, 0.3)`
-                    }}
-                ></div>
+        {/* Button Group */}
+        <div className="flex gap-7 mt-7">
+          <CTAButton active={ctabtn1.active} linkto={ctabtn1.link}>
+            <div className="flex items-center gap-2">
+              {ctabtn1.btnText}
+              <FaArrowRight />
             </div>
-            
-            <div className='flex flex-col text-center w-[10%] text-richblack-200 font-inter font-bold'>
-                <p>1</p>
-                <p>2</p>
-                <p>3</p>
-                <p>4</p>
-                <p>5</p>
-                <p>6</p>
-                <p>7</p>
-                <p>8</p>
-                <p>9</p>
-                <p>10</p>
-                <p>11</p>
-                <p>12</p>
-            </div>
+          </CTAButton>
+          <CTAButton active={ctabtn2.active} linkto={ctabtn2.link}>
+            {ctabtn2.btnText}
+          </CTAButton>
+        </div>
+      </div>
 
-            <div className={`flex flex-col w-[90%] gap-2 font-mono ${codeColor} pr-2 `}>
-                <TypeAnimation
-                
-                sequence={[codeblock , 10000 , ""]}
-                repeat={Infinity}
-                cursor={true}
-                style={
-                    {
-                        whiteSpace:"pre-line",
-                        display:"block"
-                    }
-                }
-                omitDeletionAnimation={true}
-                />
-            </div>
+      {/* Section 2 */}
+      <div className="h-fit code-border flex flex-row py-3 text-[10px] sm:text-sm leading-[18px] sm:leading-6 relative w-[100%] lg:w-[470px]">
+        {backgroundGradient}
+        {/* Indexing */}
+        <div className="text-center flex flex-col   w-[10%] select-none text-richblack-400 font-inter font-bold ">
+          <p>1</p>
+          <p>2</p>
+          <p>3</p>
+          <p>4</p>
+          <p>5</p>
+          <p>6</p>
+          <p>7</p>
+          <p>8</p>
+          <p>9</p>
+          <p>10</p>
+          <p>11</p>
         </div>
+
+        {/* Codes */}
+        <div
+          className={`w-[90%] flex flex-col gap-2 font-bold font-mono ${codeColor} pr-1`}
+        >
+          <TypeAnimation
+            sequence={[codeblock, 1000, ""]}
+            cursor={true}
+            repeat={Infinity}
+            style={{
+              whiteSpace: "pre-line",
+              display: "block",
+            }}
+            omitDeletionAnimation={true}
+          />
         </div>
-      
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default CodeBlocks
+export default CodeBlocks;

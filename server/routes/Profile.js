@@ -1,27 +1,25 @@
-const express = require("express");
-const router = express.Router();
-
-const {auth} = require('../middlewares/auth');
-
+const express = require("express")
+const router = express.Router()
+const { auth, isInstructor } = require("../middlewares/auth")
 const {
-    updateProfile,
-    deleteAccount,
-    getUserDetails,
-    getEnrolledCourses,
-    uploadProfileImage
+  deleteAccount,
+  updateProfile,
+  getAllUserDetails,
+  updateDisplayPicture,
+  getEnrolledCourses,
+  instructorDashboard,
+} = require("../controllers/Profile")
 
-} = require('../controllers/Profile');
+// ********************************************************************************************************
+//                                      Profile routes
+// ********************************************************************************************************
+// Delet User Account
+router.delete("/deleteProfile", auth, deleteAccount)
+router.put("/updateProfile", auth, updateProfile)
+router.get("/getUserDetails", auth, getAllUserDetails)
+// Get Enrolled Courses
+router.get("/getEnrolledCourses", auth, getEnrolledCourses)
+router.put("/updateDisplayPicture", auth, updateDisplayPicture)
+router.get("/instructorDashboard", auth, isInstructor, instructorDashboard)
 
-
-// ************Profile Routes************
-
-// Route for profile
-router.delete('/deleteProfile',deleteAccount);
-router.put('/updateProfile',auth,updateProfile);
-router.put('/updateProfileImage',auth,uploadProfileImage);
-router.get('/getUserDetails',auth,getUserDetails);
-
-// Routes for enrolled courses
-router.get('/getEnrolledCourses',auth,getEnrolledCourses);
-
-module.exports = router;
+module.exports = router
