@@ -37,8 +37,6 @@ exports.verifyPayment = async (req, res) => {
     console.log(error);
     return res.status(500).json({ success: false, message: "Failed to enroll in courses" });
   }
-
-  return res.status(200).json({ success: false, message: "Payment Failed" });
 };
 
 // Send Payment Success Email
