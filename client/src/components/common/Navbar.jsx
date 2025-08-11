@@ -48,7 +48,12 @@ function Navbar() {
       <div className="flex w-11/12 max-w-maxContent items-center justify-between">
         {/* Logo */}
         <Link to="/">
-          <img src={logo} alt="Logo" width={160} height={32} loading="lazy" />
+          <div className="flex items-center gap-x-2">
+            <div className=" flex h-[40px] w-[40px] items-center justify-center text-[22px] font-bold bg-white p-1 rounded-full">
+              ES
+            </div>
+            <h1 className="text-white font-bold text-lg">EduSphere</h1>
+          </div>
         </Link>
         {/* Navigation links */}
         <nav className="hidden md:block">

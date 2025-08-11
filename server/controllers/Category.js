@@ -31,20 +31,27 @@ exports.createCategory = async (req, res) => {
 
 exports.showAllCategories = async (req, res) => {
 	try {
-        console.log("INSIDE SHOW ALL CATEGORIES");
-		const allCategorys = await Category.find({});
-		res.status(200).json({
-			success: true,
-			data: allCategorys,
-		});
-	} catch (error) {
-		return res.status(500).json({
-			success: false,
-			message: error.message,
-		});
-	}
-};
+    const allCategories = await Category.find({});
 
+    if (!allCategories.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No categories found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: allCategories,
+      message: "Categories fetched successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 //categoryPageDetails 
 
 exports.categoryPageDetails = async (req, res) => {

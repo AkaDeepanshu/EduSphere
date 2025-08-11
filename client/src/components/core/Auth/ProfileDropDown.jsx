@@ -19,7 +19,7 @@ export default function ProfileDropdown() {
   if (!user) return null
 
   return (
-    <button className="relative" onClick={() => setOpen(true)}>
+    <button className="relative cursor-pointer" onClick={() => setOpen(true)}>
       <div className="flex items-center gap-x-1">
         <img
           src={user?.image}

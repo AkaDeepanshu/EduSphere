@@ -77,7 +77,7 @@ exports.signup = async (req, res) => {
 
     // Create the user
     let approved = ""
-    approved === "Instructor" ? (approved = false) : (approved = true)
+    accountType === "Instructor" ? (approved = false) : (approved = true)
 
     // Create the Additional Profile For User
     const profileDetails = await Profile.create({
@@ -95,7 +95,7 @@ exports.signup = async (req, res) => {
       accountType: accountType,
       approved: approved,
       additionalDetails: profileDetails._id,
-      image: "",
+      image: `https:api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
     })
 
     return res.status(200).json({
@@ -143,7 +143,7 @@ exports.login = async (req, res) => {
     if (await bcrypt.compare(password, user.password)) {
       const token = jwt.sign(
         { email: user.email, id: user._id, role: user.role },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET_KEY,
         {
           expiresIn: "24h",
         }

@@ -38,22 +38,42 @@ function ReviewSlider() {
   return (
     <div className="text-white">
       <div className="my-[50px] h-[184px] max-w-maxContentTab lg:max-w-maxContent">
-        <Swiper
-          slidesPerView={4}
+        {reviews.length === 0 ? (
+          <div className="flex h-full items-center justify-center text-richblack-25">
+            No reviews yet
+          </div>
+        ) : (
+          <Swiper
+          slidesPerView={1}
           spaceBetween={25}
-          loop={true}
-          freeMode={true}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
+          loop={reviews.length > 1}
+          freeMode={reviews.length > 1}
+          autoplay={
+            reviews.length > 1 
+              ? {
+                  delay: 2500,
+                  disableOnInteraction: false,
+                }
+              : false
+          }
           modules={[FreeMode, Pagination, Autoplay]}
-          className="w-full "
+          breakpoints={{
+            640: {
+              slidesPerView: reviews.length < 2 ? reviews.length : 2,
+            },
+            768: {
+              slidesPerView: reviews.length < 3 ? reviews.length : 3,
+            },
+            1024: {
+              slidesPerView: reviews.length < 4 ? reviews.length : 4,
+            },
+          }}
+          className={`w-full ${reviews.length === 1 ? 'max-w-[400px] mx-auto' : ''}`}
         >
           {reviews.map((review, i) => {
             return (
               <SwiperSlide key={i}>
-                <div className="flex flex-col gap-3 bg-richblack-800 p-3 text-[14px] text-richblack-25">
+                <div className={`flex flex-col gap-3 bg-richblack-800 p-3 text-[14px] text-richblack-25 h-full ${reviews.length === 1 ? 'w-full' : ''}`}>
                   <div className="flex items-center gap-4">
                     <img
                       src={
@@ -97,8 +117,8 @@ function ReviewSlider() {
               </SwiperSlide>
             )
           })}
-          {/* <SwiperSlide>Slide 1</SwiperSlide> */}
         </Swiper>
+        )}
       </div>
     </div>
   )
