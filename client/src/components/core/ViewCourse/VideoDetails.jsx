@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import ReactPlayer from "react-player";
+import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 
 import { markLectureAsComplete } from "../../../services/operations/courseDetailsAPI";
 import { updateCompletedLectures } from "../../../slices/viewCourseSlice";
@@ -21,6 +22,10 @@ const VideoDetails = () => {
   const [previewSource, setPreviewSource] = useState("");
   const [videoEnded, setVideoEnded] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [played, setPlayed] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -34,9 +39,14 @@ const VideoDetails = () => {
         const filteredVideoData = filteredData?.[0]?.subSection.filter(
           (data) => data._id === subSectionId
         );
+        console.log("Video Data:", filteredVideoData[0]); // For debugging
         setVideoData(filteredVideoData[0]);
         setPreviewSource(courseEntireData.thumbnail);
         setVideoEnded(false);
+        setIsPlaying(false); // Don't auto-play, wait for user interaction
+        setPlayed(0); // Reset progress
+        setVolume(1); // Reset volume
+        setPlaybackRate(1); // Reset playback speed
       }
     })();
   }, [courseSectionData, courseEntireData, location.pathname]);
@@ -141,71 +151,90 @@ const VideoDetails = () => {
     <div className="flex flex-col gap-5 text-white">
       {!videoData ? (
         <img
-          src={previewSource}
+          src={previewSource || null}
           alt="Preview"
           className="h-full w-full rounded-md object-cover"
         />
       ) : (
         <div className="relative w-full aspect-video">
-          <ReactPlayer
-            ref={playerRef}
-            url={videoData?.videoUrl}
-            width="100%"
-            height="100%"
-            controls
-            playing
-            onEnded={() => setVideoEnded(true)}
-          />
-
-          {videoEnded && (
-            <div
-              style={{
-                backgroundImage:
-                  "linear-gradient(to top, rgb(0, 0, 0), rgba(0,0,0,0.7), rgba(0,0,0,0.5), rgba(0,0,0,0.1)",
+          <div className="absolute inset-0">
+            <ReactPlayer
+              ref={playerRef}
+              src={videoData?.videoUrl}
+              width="100%"
+              height="100%"
+              playing={isPlaying}
+              volume={volume}
+              playbackRate={playbackRate}
+              onEnded={() => {
+                setVideoEnded(true);
+                setIsPlaying(false);
               }}
-              className="absolute inset-0 z-[100] grid place-content-center font-inter"
-            >
-              {!completedLectures.includes(subSectionId) && (
+              onProgress={({ played }) => setPlayed(played)}
+              style={{ position: "absolute", top: 0, left: 0 }}
+              controls={true}
+              config={{
+                file: {
+                  attributes: {
+                    controlsList: "nodownload",
+                    disablePictureInPicture: true,
+                    onContextMenu: (e) => e.preventDefault(),
+                  },
+                },
+              }}
+            />
+
+            {videoEnded && (
+              <div
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top, rgb(0, 0, 0), rgba(0,0,0,0.7), rgba(0,0,0,0.5), rgba(0,0,0,0.1)",
+                }}
+                className="absolute inset-0 z-[100] grid place-content-center font-inter"
+              >
+                {!completedLectures.includes(subSectionId) && (
+                  <IconBtn
+                    disabled={loading}
+                    onclick={handleLectureCompletion}
+                    text={!loading ? "Mark As Completed" : "Loading..."}
+                    customClasses="text-xl max-w-max px-4 mx-auto"
+                  />
+                )}
                 <IconBtn
                   disabled={loading}
-                  onclick={handleLectureCompletion}
-                  text={!loading ? "Mark As Completed" : "Loading..."}
-                  customClasses="text-xl max-w-max px-4 mx-auto"
+                  onclick={() => {
+                    if (playerRef?.current) {
+                      // playerRef.current.seekTo(0, "seconds");
+                      setVideoEnded(false);
+                      setIsPlaying(true);
+                    }
+                  }}
+                  text="Rewatch"
+                  customClasses="text-xl max-w-max px-4 mx-auto mt-2"
                 />
-              )}
-              <IconBtn
-                disabled={loading}
-                onclick={() => {
-                  if (playerRef?.current) {
-                    playerRef.current.seekTo(0);
-                    setVideoEnded(false);
-                  }
-                }}
-                text="Rewatch"
-                customClasses="text-xl max-w-max px-4 mx-auto mt-2"
-              />
-              <div className="mt-10 flex min-w-[250px] justify-center gap-x-4 text-xl">
-                {!isFirstVideo() && (
-                  <button
-                    disabled={loading}
-                    onClick={goToPrevVideo}
-                    className="blackButton"
-                  >
-                    Prev
-                  </button>
-                )}
-                {!isLastVideo() && (
-                  <button
-                    disabled={loading}
-                    onClick={goToNextVideo}
-                    className="blackButton"
-                  >
-                    Next
-                  </button>
-                )}
+                <div className="mt-10 flex min-w-[250px] justify-center gap-x-4 text-xl">
+                  {!isFirstVideo() && (
+                    <button
+                      disabled={loading}
+                      onClick={goToPrevVideo}
+                      className="blackButton"
+                    >
+                      Prev
+                    </button>
+                  )}
+                  {!isLastVideo() && (
+                    <button
+                      disabled={loading}
+                      onClick={goToNextVideo}
+                      className="blackButton"
+                    >
+                      Next
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
