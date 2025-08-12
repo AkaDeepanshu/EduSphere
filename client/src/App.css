@@ -215,12 +215,12 @@ details > summary::-webkit-details-marker {
 }
 
 /* Swiper CSS Starts */
-/* .swiper {
+.swiper {
   max-width: 1200px;
   width: 91.66%;
   height: 185px;
   margin: 50px 0px;
-} */
+}
 
 .swiper-slide {
   width: 100%;
