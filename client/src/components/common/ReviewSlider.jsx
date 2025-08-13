@@ -48,6 +48,8 @@ function ReviewSlider() {
             spaceBetween={25}
             loop={reviews.length > 1}
             freeMode={reviews.length > 1}
+            speed={6000}
+            loopedSlides={reviews.length}
             autoplay={
               reviews.length > 1
                 ? {
@@ -56,7 +58,8 @@ function ReviewSlider() {
                   }
                 : false
             }
-            modules={[FreeMode, Pagination, Autoplay]}
+            freeModeMomentum={false}
+            modules={[FreeMode,Pagination, Autoplay]}
             breakpoints={{
               0: {
                 slidesPerView: 1,

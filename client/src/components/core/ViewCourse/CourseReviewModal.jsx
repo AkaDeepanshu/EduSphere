@@ -1,7 +1,8 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { RxCross2 } from "react-icons/rx"
-import ReactStars from "react-rating-stars-component"
+import { Rating } from '@smastrom/react-rating'
+import '@smastrom/react-rating/style.css'
 import { useSelector } from "react-redux"
 
 import { createRating } from "../../../services/operations/courseDetailsAPI"
@@ -11,6 +12,7 @@ export default function CourseReviewModal({ setReviewModal }) {
   const { user } = useSelector((state) => state.profile)
   const { token } = useSelector((state) => state.auth)
   const { courseEntireData } = useSelector((state) => state.viewCourse)
+  const [rating, setRating] = useState(0)
 
   const {
     register,
@@ -21,7 +23,7 @@ export default function CourseReviewModal({ setReviewModal }) {
 
   useEffect(() => {
     setValue("courseExperience", "")
-    setValue("courseRating", 0)
+    setRating(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -34,7 +36,7 @@ export default function CourseReviewModal({ setReviewModal }) {
     await createRating(
       {
         courseId: courseEntireData._id,
-        rating: data.courseRating,
+        rating: rating,
         review: data.courseExperience,
       },
       token
@@ -43,7 +45,7 @@ export default function CourseReviewModal({ setReviewModal }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[1000] !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[1000] !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-richblack-800 bg-opacity-10 backdrop-blur-sm">
       <div className="my-10 w-11/12 max-w-[700px] rounded-lg border border-richblack-400 bg-richblack-800">
         {/* Modal Header */}
         <div className="flex items-center justify-between rounded-t-lg bg-richblack-700 p-5">
@@ -71,11 +73,11 @@ export default function CourseReviewModal({ setReviewModal }) {
             onSubmit={handleSubmit(onSubmit)}
             className="mt-6 flex flex-col items-center"
           >
-            <ReactStars
-              count={5}
-              onChange={ratingChanged}
-              size={24}
-              activeColor="#ffd700"
+            <Rating
+              style={{ maxWidth: 180 }}
+              value={rating}
+              onChange={setRating}
+              isRequired
             />
             <div className="flex w-11/12 flex-col space-y-2">
               <label
