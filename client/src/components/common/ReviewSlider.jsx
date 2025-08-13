@@ -51,7 +51,7 @@ function ReviewSlider() {
             autoplay={
               reviews.length > 1
                 ? {
-                    delay: 2500,
+                    delay: 0,
                     disableOnInteraction: false,
                   }
                 : false
