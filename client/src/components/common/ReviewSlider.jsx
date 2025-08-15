@@ -36,8 +36,8 @@ function ReviewSlider() {
   // console.log(reviews)
 
   return (
-    <div className="text-white">
-      <div className="my-[50px] h-[184px] max-w-maxContentTab lg:max-w-maxContent">
+    <div className="text-white w-full overflow-hidden">
+      <div className="my-[50px] h-[184px] max-w-maxContent mx-auto px-4">
         {reviews.length === 0 ? (
           <div className="flex h-full items-center justify-center text-richblack-25">
             No reviews yet
@@ -45,11 +45,10 @@ function ReviewSlider() {
         ) : (
           <Swiper
             slidesPerView={4}
-            spaceBetween={25}
+            spaceBetween={24}
             loop={reviews.length > 1}
             freeMode={reviews.length > 1}
             speed={6000}
-            loopedSlides={reviews.length}
             autoplay={
               reviews.length > 1
                 ? {
@@ -59,32 +58,32 @@ function ReviewSlider() {
                 : false
             }
             freeModeMomentum={false}
-            modules={[FreeMode,Pagination, Autoplay]}
+            modules={[FreeMode, Pagination, Autoplay]}
             breakpoints={{
               0: {
                 slidesPerView: 1,
+                spaceBetween: 16,
               },
-              640: {
-                slidesPerView: Math.min(reviews.length, 2),
+              580: {
+                slidesPerView: 2,
+                spaceBetween: 20,
               },
-              768: {
-                slidesPerView: Math.min(reviews.length, 3),
+              940: {
+                slidesPerView: 3,
+                spaceBetween: 24,
               },
-              1024: {
-                slidesPerView: Math.min(reviews.length, 4),
+              1424: {
+                slidesPerView: 4,
+                spaceBetween: 24,
               },
             }}
-            className={`w-full ${
-              reviews.length === 1 ? "max-w-[400px] mx-auto" : ""
-            }`}
+            className="w-full flex justify-center"
           >
             {reviews.map((review, i) => {
               return (
-                <SwiperSlide key={i} className="w-[500px]">
+                <SwiperSlide key={i} >
                   <div
-                    className={` flex flex-col gap-3 bg-richblack-800 p-3 text-[14px] text-richblack-25 h-full ${
-                      reviews.length === 1 ? "w-full" : ""
-                    }`}
+                    className="flex flex-col gap-3 bg-richblack-800 p-3 text-[14px] text-richblack-25 h-full w-full"
                   >
                     <div className="flex items-center gap-4">
                       <img
